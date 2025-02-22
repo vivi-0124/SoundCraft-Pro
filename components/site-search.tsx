@@ -1,9 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Search } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
+import { useRef, useState, useCallback } from "react";
+import { Search, Building2, Headphones, Wrench, X } from "lucide-react";
+import Link from "next/link";
 import {
   Command,
   CommandEmpty,
@@ -13,108 +12,146 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+
+interface SearchItem {
+  title: string;
+  description: string;
+  href: string;
+}
+
+interface SearchSuggestions {
+  [key: string]: SearchItem[];
+}
 
 // 検索候補のカテゴリー
-const suggestions = {
+const suggestions: SearchSuggestions = {
   "サービス": [
-    "音響システム設計",
-    "機材レンタル",
-    "技術サポート",
-    "メンテナンス",
+    { title: "音響システム設計", description: "最適な音響空間を実現するプロフェッショナルな設計サービス", href: "/services" },
+    { title: "機材レンタル", description: "高品質な音響機材を必要な期間だけレンタル", href: "/services" },
+    { title: "技術サポート", description: "24時間体制での専門的な技術サポート", href: "/services" },
+    { title: "メンテナンス", description: "定期的な点検と迅速な修理対応", href: "/services" },
   ],
   "機材": [
-    "マイク・音声機器",
-    "ミキサー・制御機器",
-    "スピーカー・音響機器",
-    "レコーディング機器",
-    "スタジオ設備",
-    "DJ・演出機器"
+    { title: "マイク・音声機器", description: "プロフェッショナルな音声収録・処理機器", href: "/equipment" },
+    { title: "ミキサー・制御機器", description: "高度な音声制御を可能にする機器", href: "/equipment" },
+    { title: "スピーカー・音響機器", description: "高品質な音響再生システム", href: "/equipment" },
+    { title: "レコーディング機器", description: "プロ仕様のレコーディング機材", href: "/equipment" },
+    { title: "スタジオ設備", description: "プロフェッショナルなスタジオ機材", href: "/equipment" },
+    { title: "DJ・演出機器", description: "イベント演出用の専門機材", href: "/equipment" }
   ],
   "会社情報": [
-    "会社概要",
-    "お問い合わせ",
-    "採用情報",
-    "アクセス"
+    { title: "会社概要", description: "SoundCraft Proの企業情報", href: "/company" },
+    { title: "お問い合わせ", description: "ご質問・ご相談はこちら", href: "/contact" },
+    { title: "採用情報", description: "音響のプロフェッショナルを目指す方へ", href: "/careers" },
+    { title: "アクセス", description: "所在地・アクセス方法", href: "/access" }
   ]
 };
 
 export function SiteSearch() {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelect = (currentValue: string) => {
-    setValue(currentValue);
-    setOpen(false);
-
-    // カテゴリーに基づいてルーティング
-    switch (currentValue) {
-      case "音響システム設計":
-      case "機材レンタル":
-      case "技術サポート":
-        router.push("/services");
-        break;
-      case "マイク・音声機器":
-      case "ミキサー・制御機器":
-      case "スピーカー・音響機器":
-      case "レコーディング機器":
-      case "スタジオ設備":
-      case "DJ・演出機器":
-        router.push("/equipment");
-        break;
-      case "会社概要":
-        router.push("/company");
-        break;
-      case "お問い合わせ":
-        router.push("/contact");
-        break;
-      default:
-        // デフォルトの検索処理
-        break;
+  const handleOpenChange = useCallback((newOpen: boolean) => {
+    setOpen(newOpen);
+    if (newOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 50);
+    } else {
+      setValue("");
     }
-  };
+  }, []);
+
+  const getIcon = useCallback((category: string) => {
+    switch (category) {
+      case "サービス":
+        return <Wrench className="mr-2 h-4 w-4" />;
+      case "機材":
+        return <Headphones className="mr-2 h-4 w-4" />;
+      case "会社情報":
+        return <Building2 className="mr-2 h-4 w-4" />;
+      default:
+        return null;
+    }
+  }, []);
+
+  const handleSelect = useCallback((href: string, title: string) => {
+    setValue(title);
+    setOpen(false);
+    window.location.href = href;
+  }, []);
 
   return (
-    <div className="relative w-full max-w-sm">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-            <Input
-              type="text"
-              placeholder="サイト内を検索..."
-              className="pl-9 h-9"
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-9 w-9"
+        >
+          <Search className="h-5 w-5" />
+          <span className="sr-only">検索を開く</span>
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[600px] p-0 [&>button]:hidden">
+        <Command>
+          <div className="flex items-center border-b p-4">
+            <CommandInput
+              ref={inputRef}
+              placeholder="検索キーワードを入力..."
               value={value}
-              onChange={(e) => setValue(e.target.value)}
-              onClick={() => setOpen(true)}
+              onValueChange={setValue}
+              className="flex h-9 w-full rounded-md bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
             />
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-8 w-8 ml-2 flex-shrink-0"
+              onClick={() => setOpen(false)}
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">閉じる</span>
+            </Button>
           </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[400px] p-0" align="start">
-          <Command>
-            <CommandInput placeholder="検索キーワードを入力..." />
-            <CommandList>
-              <CommandEmpty>見つかりませんでした。</CommandEmpty>
-              {Object.entries(suggestions).map(([category, items]) => (
-                <CommandGroup key={category} heading={category}>
-                  {items.map((item) => (
+          <CommandList>
+            <CommandEmpty>
+              <div className="flex flex-col items-center justify-center py-6 text-sm text-muted-foreground">
+                <Search className="h-8 w-8 mb-2 opacity-50" />
+                <p>検索結果が見つかりませんでした。</p>
+              </div>
+            </CommandEmpty>
+            {Object.entries(suggestions).map(([category, items]) => (
+              <CommandGroup key={category} heading={category}>
+                {items
+                  .filter(item =>
+                    value === "" ||
+                    item.title.toLowerCase().includes(value.toLowerCase()) ||
+                    item.description.toLowerCase().includes(value.toLowerCase())
+                  )
+                  .map((item) => (
                     <CommandItem
-                      key={item}
-                      onSelect={() => handleSelect(item)}
+                      key={item.title}
+                      onSelect={() => handleSelect(item.href, item.title)}
+                      className="flex items-center px-4 py-2"
                     >
-                      {item}
+                      {getIcon(category)}
+                      <div className="flex flex-col">
+                        <span className="font-medium">{item.title}</span>
+                        <span className="text-xs text-muted-foreground">{item.description}</span>
+                      </div>
                     </CommandItem>
                   ))}
-                </CommandGroup>
-              ))}
-            </CommandList>
-          </Command>
-        </PopoverContent>
-      </Popover>
-    </div>
+              </CommandGroup>
+            ))}
+          </CommandList>
+        </Command>
+      </DialogContent>
+    </Dialog>
   );
 } 

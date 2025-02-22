@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Volume2, Users, Wrench, Music, Mic2, Headphones, Phone, ArrowUp, ExternalLink, Search, ArrowDown, ArrowLeft } from "lucide-react";
+import { ArrowRight, Volume2, Users, Wrench, Music, Mic2, Headphones, Phone, ArrowUp, ExternalLink, Search, ArrowDown, ArrowLeft, X, Building2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Logo } from "@/components/Logo";
@@ -520,7 +520,7 @@ export default function Home() {
 
         {/* スクロールインジケーター */}
         <motion.div
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+          className="scroll-indicator"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -530,34 +530,33 @@ export default function Home() {
             repeatType: "reverse"
           }}
         >
-          <div className="flex flex-col items-center text-white/60">
-            <motion.div
-              animate={{ 
-                y: [0, 10, 0],
-                opacity: [0.6, 1, 0.6]
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              <ArrowDown className="h-6 w-6" />
-            </motion.div>
-            <motion.span 
-              className="text-sm mt-2"
-              animate={{
-                opacity: [0.6, 1, 0.6]
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse"
-              }}
-            >
-              Scroll
-            </motion.span>
-          </div>
+          <motion.div
+            className="scroll-arrow"
+            animate={{ 
+              y: [0, 10, 0],
+              opacity: [0.6, 1, 0.6]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
+          >
+            <ArrowDown />
+          </motion.div>
+          <motion.span 
+            className="scroll-text"
+            animate={{
+              opacity: [0.6, 1, 0.6]
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
+          >
+            Scroll
+          </motion.span>
         </motion.div>
       </section>
 
@@ -934,28 +933,37 @@ export default function Home() {
             </p>
             
             {/* Filter Input with Suggestions */}
-            <div className="max-w-md mx-auto mb-8">
+            <div className="search-container">
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                  <div className="search-input-wrapper">
+                    <Search className="search-icon" />
                     <Input
                       type="text"
-                      placeholder="機材を検索..."
-                      className="pl-10"
+                      placeholder="機材やメーカーを検索..."
+                      className="search-input"
                       value={filter}
                       onChange={(e) => setFilter(e.target.value)}
                       onClick={() => setOpen(true)}
                     />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-[400px] p-0" align="start">
-                  <Command>
-                    <CommandInput placeholder="検索キーワードを入力..." />
+                <PopoverContent className="search-command p-0" align="start">
+                  <Command className="search-command">
+                    <CommandInput 
+                      placeholder="キーワードを入力..." 
+                      className="search-input"
+                    />
                     <CommandList>
-                      <CommandEmpty>見つかりませんでした。</CommandEmpty>
+                      <CommandEmpty className="search-command-empty">
+                        検索結果が見つかりませんでした
+                      </CommandEmpty>
                       {Object.entries(suggestions).map(([category, items]) => (
-                        <CommandGroup key={category} heading={category}>
+                        <CommandGroup 
+                          key={category} 
+                          heading={category}
+                          className="search-command-group"
+                        >
                           {items.map((item) => (
                             <CommandItem
                               key={item}
@@ -963,8 +971,16 @@ export default function Home() {
                                 setFilter(value);
                                 setOpen(false);
                               }}
+                              className="search-command-item"
                             >
-                              {item}
+                              {category === "機材カテゴリー" ? (
+                                <Headphones className="search-command-item-icon" />
+                              ) : (
+                                <Building2 className="search-command-item-icon" />
+                              )}
+                              <div className="search-command-item-content">
+                                <div className="search-command-item-title">{item}</div>
+                              </div>
                             </CommandItem>
                           ))}
                         </CommandGroup>
@@ -973,6 +989,17 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover>
+              {filter && (
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  onClick={() => setFilter("")}
+                >
+                  <X className="h-4 w-4" />
+                </motion.button>
+              )}
             </div>
           </motion.div>
 

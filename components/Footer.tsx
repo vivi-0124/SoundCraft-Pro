@@ -27,20 +27,20 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
         {/* メインフッターコンテンツ */}
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* ブランドセクション */}
-          <div className="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 space-y-4">
-            <Logo variant="white" />
+          <div className="col-span-2 sm:col-span-2 md:col-span-2 lg:col-span-1 footer-brand-section">
+            <Logo variant="white" className="logo" />
             <p className="text-slate-400">
-              プロフェッショナルな音響ソリューションを提供し、<br />
+              プロフェッショナルな音響ソリューションを提供し、<br className="hidden md:inline" />
               あらゆる音響ニーズにお応えします。
             </p>
-            <div className="flex space-x-4">
+            <div className="footer-social-icons">
               <a 
                 href="https://twitter.com/soundcraftpro" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="text-slate-400 hover:text-white"
               >
-                <Twitter className="h-6 w-6" />
+                <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </a>
               <a 
@@ -49,7 +49,7 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
                 rel="noopener noreferrer" 
                 className="text-slate-400 hover:text-white"
               >
-                <Instagram className="h-6 w-6" />
+                <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </a>
               <a 
@@ -58,7 +58,7 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
                 rel="noopener noreferrer" 
                 className="text-slate-400 hover:text-white"
               >
-                <Youtube className="h-6 w-6" />
+                <Youtube className="h-5 w-5" />
                 <span className="sr-only">YouTube</span>
               </a>
             </div>
@@ -120,11 +120,11 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
 
           {/* モバイルアコーディオン */}
           <div className="col-span-2 md:hidden">
-            <Accordion type="single" collapsible className="w-full space-y-4">
-              <AccordionItem value="menu" className="border-b-0">
-                <AccordionTrigger className="text-white hover:text-white/80">メニュー</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-3 py-2">
+            <Accordion type="single" collapsible className="mobile-footer-accordion w-full space-y-2">
+              <AccordionItem value="menu" className="accordion-item">
+                <AccordionTrigger className="accordion-trigger">メニュー</AccordionTrigger>
+                <AccordionContent className="accordion-content">
+                  <ul>
                     <li><Link href="/" className="text-white/70 hover:text-white">ホーム</Link></li>
                     <li><Link href="/services" className="text-white/70 hover:text-white">サービス</Link></li>
                     <li><Link href="/works" className="text-white/70 hover:text-white">実績</Link></li>
@@ -134,10 +134,10 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="support" className="border-b-0">
-                <AccordionTrigger className="text-white hover:text-white/80">サポート</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-3 py-2">
+              <AccordionItem value="support" className="accordion-item">
+                <AccordionTrigger className="accordion-trigger">サポート</AccordionTrigger>
+                <AccordionContent className="accordion-content">
+                  <ul>
                     <li><Link href="/contact" className="text-white/70 hover:text-white">お問い合わせ</Link></li>
                     <li><Link href="/faq" className="text-white/70 hover:text-white">よくある質問</Link></li>
                     <li><Link href="/request" className="text-white/70 hover:text-white">資料請求</Link></li>
@@ -146,10 +146,10 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="company" className="border-b-0">
-                <AccordionTrigger className="text-white hover:text-white/80">会社情報</AccordionTrigger>
-                <AccordionContent>
-                  <ul className="space-y-3 py-2">
+              <AccordionItem value="company" className="accordion-item">
+                <AccordionTrigger className="accordion-trigger">会社情報</AccordionTrigger>
+                <AccordionContent className="accordion-content">
+                  <ul>
                     <li><Link href="/about" className="text-white/70 hover:text-white">会社概要</Link></li>
                     <li><Link href="/philosophy" className="text-white/70 hover:text-white">企業理念</Link></li>
                     <li><Link href="/history" className="text-white/70 hover:text-white">沿革</Link></li>
@@ -165,7 +165,7 @@ export function Footer({ className, ...props }: React.HTMLAttributes<HTMLElement
         {/* コピーライト */}
         <div className="border-t border-slate-800 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-400 footer-copyright">
               © 2024 SoundCraft Pro. All rights reserved.
             </p>
             <div className="flex gap-4">

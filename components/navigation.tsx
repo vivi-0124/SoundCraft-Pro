@@ -4,16 +4,11 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/Logo";
 import { SiteSearch } from "@/components/site-search";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 
 const menuItems = [
   { href: "/", label: "ホーム" },
@@ -52,34 +47,12 @@ export function Navigation() {
                 {item.label}
               </Link>
             ))}
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Search className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="top" className="h-32">
-                <div className="mt-8 px-4">
-                  <SiteSearch />
-                </div>
-              </SheetContent>
-            </Sheet>
+            <SiteSearch />
           </div>
 
           {/* Mobile Navigation */}
           <div className="flex items-center space-x-2 md:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Search className="h-5 w-5" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="top" className="h-32">
-                <div className="mt-8 px-4">
-                  <SiteSearch />
-                </div>
-              </SheetContent>
-            </Sheet>
+            <SiteSearch />
             <Button
               variant="ghost"
               size="icon"
