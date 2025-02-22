@@ -156,3 +156,67 @@
     display: none;
   }
 }
+
+/* Services Swiper */
+.services-swiper {
+  padding: 24px 0 48px !important;
+  position: relative;
+}
+
+.services-swiper .swiper-pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.services-swiper .swiper-pagination-bullet {
+  background: hsl(var(--primary));
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.services-swiper .swiper-pagination-bullet:hover {
+  opacity: 0.8;
+}
+
+.services-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.services-swiper .swiper-slide {
+  height: auto;
+}
+
+/* Works Swiper */
+.works-swiper {
+  padding: 24px 0 48px !important;
+  position: relative;
+}
+
+.works-swiper .swiper-pagination {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.works-swiper .swiper-pagination-bullet {
+  background: hsl(var(--primary));
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.works-swiper .swiper-pagination-bullet:hover {
+  opacity: 0.8;
+}
+
+.works-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.works-swiper .swiper-slide {
+  height: auto;
+}

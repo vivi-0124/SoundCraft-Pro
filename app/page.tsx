@@ -552,7 +552,7 @@ export default function Home() {
               あらゆる音響ニーズに対応する幅広いサービスを提供しています
             </p>
           </motion.div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="hidden md:grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: <Music className="h-12 w-12 mb-4 text-primary" />,
@@ -598,6 +598,66 @@ export default function Home() {
               </Card>
             ))}
           </div>
+          <div className="md:hidden">
+            <Swiper
+              modules={[Navigation, Pagination, A11y]}
+              spaceBetween={16}
+              slidesPerView={1}
+              loop={true}
+              pagination={{
+                clickable: true,
+                el: '.services-pagination',
+              }}
+              className="services-swiper"
+            >
+              {[
+                {
+                  icon: <Music className="h-12 w-12 mb-4 text-primary" />,
+                  title: "音響システム設計",
+                  description: "空間特性を考慮した最適な音響システムを設計します",
+                  features: ["音場シミュレーション", "アコースティック設計", "システム構築"]
+                },
+                {
+                  icon: <Mic2 className="h-12 w-12 mb-4 text-primary" />,
+                  title: "機材レンタル",
+                  description: "最新の音響機材を必要な期間だけレンタルできます",
+                  features: ["最新機材", "柔軟なレンタル", "コスト削減"]
+                },
+                {
+                  icon: <Headphones className="h-12 w-12 mb-4 text-primary" />,
+                  title: "技術サポート",
+                  description: "24時間体制で専門的な技術サポートを提供します",
+                  features: ["24時間対応", "専門スタッフ", "迅速な解決"]
+                }
+              ].map((service, index) => (
+                <SwiperSlide key={index}>
+                  <Card className="relative overflow-hidden">
+                    <CardHeader className="text-center">
+                      {service.icon}
+                      <CardTitle>{service.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground mb-4">{service.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {service.features.map((feature, i) => (
+                          <Badge key={i} variant="outline">{feature}</Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="justify-center">
+                      <Button asChild variant="ghost">
+                        <Link href={`/services#${service.title.toLowerCase()}`}>
+                          詳細を見る
+                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </SwiperSlide>
+              ))}
+              <div className="services-pagination mt-4"></div>
+            </Swiper>
+          </div>
         </div>
       </section>
 
@@ -617,7 +677,7 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="hidden md:grid md:grid-cols-3 gap-8">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -700,21 +760,65 @@ export default function Home() {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mt-12"
-          >
-            <Button asChild size="lg">
-              <Link href="/works">
-                実績一覧を見る
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </motion.div>
-            </div>
+          <div className="md:hidden">
+            <Swiper
+              modules={[Navigation, Pagination, A11y]}
+              spaceBetween={16}
+              slidesPerView={1}
+              loop={true}
+              pagination={{
+                clickable: true,
+                el: '.works-pagination',
+              }}
+              className="works-swiper"
+            >
+              {[
+                {
+                  src: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3",
+                  alt: "イベント実績",
+                  title: "イベント実績",
+                  description: "大規模フェスから企業イベントまで幅広い音響ニーズに対応"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+                  alt: "施工実績",
+                  title: "施工実績",
+                  description: "ライブハウスからホールまで最適な音響空間を創造"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04",
+                  alt: "導入事例",
+                  title: "導入事例",
+                  description: "プロフェッショナルな音響システムの導入実績"
+                }
+              ].map((work, index) => (
+                <SwiperSlide key={index}>
+                  <div className="relative h-[300px] rounded-lg overflow-hidden">
+                    <Image
+                      src={work.src}
+                      alt={work.alt}
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
+                      <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h3 className="text-xl font-bold mb-2">{work.title}</h3>
+                        <p className="text-sm mb-4">{work.description}</p>
+                        <Button asChild variant="outline" className="text-white border-white">
+                          <Link href="/works">
+                            詳しく見る
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+              ))}
+              <div className="works-pagination mt-4"></div>
+            </Swiper>
+          </div>
+        </div>
       </section>
 
       {/* Equipment Section with Filter */}
