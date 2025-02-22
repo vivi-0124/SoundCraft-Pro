@@ -93,7 +93,11 @@ const equipments: EquipmentItem[] = [
   }
 ];
 
-export function EquipmentSearch() {
+interface EquipmentSearchProps {
+  onFilterChange?: (value: string) => void;
+}
+
+export function EquipmentSearch({ onFilterChange }: EquipmentSearchProps) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -106,8 +110,14 @@ export function EquipmentSearch() {
       }, 50);
     } else {
       setValue("");
+      onFilterChange?.(""); // フィルターをリセット
     }
-  }, []);
+  }, [onFilterChange]);
+
+  const handleValueChange = useCallback((newValue: string) => {
+    setValue(newValue);
+    onFilterChange?.(newValue); // フィルター値を更新
+  }, [onFilterChange]);
 
   const getIcon = useCallback((category: string) => {
     switch (category) {
@@ -167,7 +177,7 @@ export function EquipmentSearch() {
                   ref={inputRef}
                   placeholder="機材を検索..."
                   value={value}
-                  onValueChange={setValue}
+                  onValueChange={handleValueChange}
                   className="flex h-9 w-full rounded-md bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                 />
               </div>
