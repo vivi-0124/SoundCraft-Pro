@@ -99,7 +99,7 @@ export function SiteSearch() {
           <span className="sr-only">検索を開く</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px] p-0 [&>button]:hidden">
+      <DialogContent className="sm:max-w-[600px] p-0 [&>button]:hidden top-0 translate-y-0 rounded-t-none border-t-0">
         <Command>
           <div className="flex items-center border-b p-4">
             <CommandInput
