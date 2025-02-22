@@ -1,8 +1,6 @@
 "use client";
 
 import { ThemeProvider } from '@/components/theme-provider';
-import { Navigation } from '@/components/navigation';
-import { Footer } from '@/components/Footer';
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -13,9 +11,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
       disableTransitionOnChange
     >
       <div className="flex min-h-screen flex-col">
-        <Navigation />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        {children}
       </div>
     </ThemeProvider>
   );

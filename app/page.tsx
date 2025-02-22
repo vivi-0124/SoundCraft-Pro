@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Volume2, Users, Wrench, Music, Mic2, Headphones, Phone, ArrowUp, ExternalLink, Search, ArrowDown } from "lucide-react";
+import { ArrowRight, Volume2, Users, Wrench, Music, Mic2, Headphones, Phone, ArrowUp, ExternalLink, Search, ArrowDown, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Logo } from "@/components/Logo";
@@ -57,6 +57,12 @@ import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, A11y } from 'swiper/modules';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Equipment {
   src: string;
@@ -118,12 +124,64 @@ const staggerChildren = {
   }
 };
 
+// メーカー情報の配列を定義
+const makers = [
+  { name: "Martin Audio", image: "/makers/martin-audio.png", description: "Martin Audioは世界最高峰の音響機器メーカーです" },
+  { name: "d&b audiotechnik", image: "/makers/db.png", description: "d&b audiotechnikは専門的な音響ソリューションを提供" },
+  { name: "ROBE", image: "/makers/robe.png", description: "ROBEは世界最高峰の音響機器メーカーです" },
+  { name: "YAMAHA", image: "/makers/yamaha.png", description: "YAMAHAは音楽機器の専門メーカーです" },
+  { name: "DiGiCo", image: "/makers/digico.png", description: "DiGiCoは専門的な音響ソリューションを提供" },
+  { name: "Avolites", image: "/makers/avolites.png", description: "Avolitesは世界最高峰の音響ソリューションを提供" },
+  { name: "Martin", image: "/makers/martin.png", description: "Martinは世界最高峰の音響機器メーカーです" },
+  { name: "SHURE", image: "/makers/shure.png", description: "SHUREは専門的な音声機器を提供" }
+];
+
+const services = [
+  {
+    icon: <Users className="h-12 w-12 mb-4 text-primary" />,
+    title: "オペレーター派遣",
+    description: "熟練したオペレーターを必要な場所に派遣します。イベントや公演の成功をサポートします。",
+    features: ["経験豊富なスタッフ", "24時間対応可能", "柔軟なスケジュール調整"]
+  },
+  {
+    icon: <Wrench className="h-12 w-12 mb-4 text-primary" />,
+    title: "メンテナンス",
+    description: "定期的な点検と迅速な修理対応で、機材の最適なコンディションを維持します。",
+    features: ["定期点検プラン", "緊急修理対応", "予防保守管理"]
+  },
+  {
+    icon: <Music className="h-12 w-12 mb-4 text-primary" />,
+    title: "音響システム設計",
+    description: "空間特性を考慮した最適な音響システムを設計。理想的な音環境を実現します。",
+    features: ["音場シミュレーション", "アコースティック設計", "システム構築"]
+  },
+  {
+    icon: <Mic2 className="h-12 w-12 mb-4 text-primary" />,
+    title: "機材レンタル",
+    description: "最新の音響機材を必要な期間だけレンタル。コスト効率の良い運用を実現します。",
+    features: ["最新機材", "柔軟なレンタル期間", "メンテナンス付き"]
+  },
+  {
+    icon: <Headphones className="h-12 w-12 mb-4 text-primary" />,
+    title: "技術サポート",
+    description: "24時間体制で専門的な技術サポートを提供。あらゆる課題に迅速に対応します。",
+    features: ["24時間対応", "専門スタッフ配置", "リモートサポート"]
+  },
+  {
+    icon: <Volume2 className="h-12 w-12 mb-4 text-primary" />,
+    title: "音響コンサルティング",
+    description: "プロフェッショナルな音響アドバイスで、最適な音響環境を実現します。",
+    features: ["現場調査", "改善提案", "音響設計"]
+  }
+];
+
 export default function Home() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [filter, setFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState<Equipment | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [open, setOpen] = useState(false);
+  const [displayedMakers, setDisplayedMakers] = useState<typeof makers>([]);
 
   // 予測入力候補のカテゴリー
   const suggestions = {
@@ -167,6 +225,22 @@ export default function Home() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // ランダムなメーカーを選択する関数
+  const getRandomMakers = () => {
+    const shuffled = [...makers].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, 4);
+  };
+
+  // 5秒ごとにメーカーをランダムに更新
+  useEffect(() => {
+    setDisplayedMakers(getRandomMakers());
+    const interval = setInterval(() => {
+      setDisplayedMakers(getRandomMakers());
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <motion.div
@@ -228,7 +302,7 @@ export default function Home() {
             <motion.div
               key={`vision-${i}`}
               className="absolute bg-gradient-to-r from-primary/20 to-primary/40"
-          style={{
+              style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
                 width: '2px',
@@ -513,10 +587,10 @@ export default function Home() {
                 <Button asChild variant="outline">
                   <Link href="/about">
                     詳しく見る
-              <ArrowRight className="ml-2 h-4" />
-            </Link>
-          </Button>
-        </motion.div>
+                    <ArrowRight className="ml-2 h-4" />
+                  </Link>
+                </Button>
+              </motion.div>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -552,51 +626,55 @@ export default function Home() {
               あらゆる音響ニーズに対応する幅広いサービスを提供しています
             </p>
           </motion.div>
-          <div className="hidden md:grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: <Music className="h-12 w-12 mb-4 text-primary" />,
-                title: "音響システム設計",
-                description: "空間特性を考慮した最適な音響システムを設計します",
-                features: ["音場シミュレーション", "アコースティック設計", "システム構築"]
-              },
-              {
-                icon: <Mic2 className="h-12 w-12 mb-4 text-primary" />,
-                title: "機材レンタル",
-                description: "最新の音響機材を必要な期間だけレンタルできます",
-                features: ["最新機材", "柔軟なレンタル", "コスト削減"]
-              },
-              {
-                icon: <Headphones className="h-12 w-12 mb-4 text-primary" />,
-                title: "技術サポート",
-                description: "24時間体制で専門的な技術サポートを提供します",
-                features: ["24時間対応", "専門スタッフ", "迅速な解決"]
-              }
-            ].map((service, index) => (
-              <Card key={index} className="relative overflow-hidden group">
-                <CardHeader className="text-center">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  {service.icon}
-                  <CardTitle>{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">{service.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {service.features.map((feature, i) => (
-                      <Badge key={i} variant="outline">{feature}</Badge>
-                    ))}
-                  </div>
-                </CardContent>
-                <CardFooter className="justify-center">
-                  <Button asChild variant="ghost" className="group-hover:bg-primary/10">
-                    <Link href={`/services#${service.title.toLowerCase()}`}>
-                      詳細を見る
-                      <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
+          {/* サービス内容のデスクトップビュー */}
+          <div className="hidden md:block">
+            <Swiper
+              modules={[Navigation, Pagination, A11y]}
+              spaceBetween={24}
+              slidesPerView={3}
+              loop={true}
+              navigation={true}
+              pagination={{
+                clickable: true,
+              }}
+              className="services-swiper !pt-4 !pb-12"
+            >
+              {services.map((service, index) => (
+                <SwiperSlide key={index} className="h-full">
+                  <Card className="h-full flex flex-col group relative overflow-hidden bg-card hover:shadow-lg transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <CardHeader className="text-center relative">
+                      <div className="mx-auto transform group-hover:scale-110 transition-transform duration-300">
+                        {service.icon}
+                      </div>
+                      <CardTitle className="text-2xl mt-2">{service.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex-1 space-y-4 relative">
+                      <p className="text-muted-foreground">{service.description}</p>
+                      <div className="flex flex-wrap gap-2">
+                        {service.features.map((feature, i) => (
+                          <Badge key={i} variant="outline" className="bg-background/50 hover:bg-background/80 transition-colors duration-200">
+                            {feature}
+                          </Badge>
+                        ))}
+                      </div>
+                    </CardContent>
+                    <CardFooter className="pt-6 flex justify-center relative">
+                      <Button
+                        variant="ghost"
+                        className="w-full group-hover:bg-primary/10 transition-colors duration-200"
+                        asChild
+                      >
+                        <Link href={`/services#${service.title.toLowerCase()}`}>
+                          詳細を見る
+                          <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-200" />
+                        </Link>
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                </SwiperSlide>
+              ))}
+            </Swiper>
           </div>
           <div className="md:hidden">
             <Swiper
@@ -604,58 +682,47 @@ export default function Home() {
               spaceBetween={16}
               slidesPerView={1}
               loop={true}
+              navigation={true}
               pagination={{
                 clickable: true,
-                el: '.services-pagination',
               }}
-              className="services-swiper"
+              className="services-swiper !pt-4 !pb-12"
             >
-              {[
-                {
-                  icon: <Music className="h-12 w-12 mb-4 text-primary" />,
-                  title: "音響システム設計",
-                  description: "空間特性を考慮した最適な音響システムを設計します",
-                  features: ["音場シミュレーション", "アコースティック設計", "システム構築"]
-                },
-                {
-                  icon: <Mic2 className="h-12 w-12 mb-4 text-primary" />,
-                  title: "機材レンタル",
-                  description: "最新の音響機材を必要な期間だけレンタルできます",
-                  features: ["最新機材", "柔軟なレンタル", "コスト削減"]
-                },
-                {
-                  icon: <Headphones className="h-12 w-12 mb-4 text-primary" />,
-                  title: "技術サポート",
-                  description: "24時間体制で専門的な技術サポートを提供します",
-                  features: ["24時間対応", "専門スタッフ", "迅速な解決"]
-                }
-              ].map((service, index) => (
-                <SwiperSlide key={index}>
-                  <Card className="relative overflow-hidden">
-                    <CardHeader className="text-center">
-                      {service.icon}
-                      <CardTitle>{service.title}</CardTitle>
+              {services.map((service, index) => (
+                <SwiperSlide key={index} className="h-full">
+                  <Card className="h-full flex flex-col group relative overflow-hidden bg-card hover:shadow-lg transition-all duration-300">
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-primary/10 to-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                    <CardHeader className="text-center relative">
+                      <div className="mx-auto transform group-hover:scale-110 transition-transform duration-300">
+                        {service.icon}
+                      </div>
+                      <CardTitle className="text-2xl mt-2">{service.title}</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground mb-4">{service.description}</p>
+                    <CardContent className="flex-1 space-y-4 relative">
+                      <p className="text-muted-foreground">{service.description}</p>
                       <div className="flex flex-wrap gap-2">
                         {service.features.map((feature, i) => (
-                          <Badge key={i} variant="outline">{feature}</Badge>
+                          <Badge key={i} variant="outline" className="bg-background/50 hover:bg-background/80 transition-colors duration-200">
+                            {feature}
+                          </Badge>
                         ))}
                       </div>
                     </CardContent>
-                    <CardFooter className="justify-center">
-                      <Button asChild variant="ghost">
+                    <CardFooter className="pt-6 flex justify-center relative">
+                      <Button
+                        variant="ghost"
+                        className="w-full group-hover:bg-primary/10 transition-colors duration-200"
+                        asChild
+                      >
                         <Link href={`/services#${service.title.toLowerCase()}`}>
                           詳細を見る
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                          <ArrowRight className="ml-2 h-4 w-4 transform group-hover:translate-x-1 transition-transform duration-200" />
                         </Link>
                       </Button>
                     </CardFooter>
                   </Card>
                 </SwiperSlide>
               ))}
-              <div className="services-pagination mt-4"></div>
             </Swiper>
           </div>
         </div>
@@ -676,96 +743,105 @@ export default function Home() {
               数多くのイベントや施設で選ばれている実績があります
             </p>
           </motion.div>
-
-          <div className="hidden md:grid md:grid-cols-3 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              viewport={{ once: true }}
-              className="relative h-64 rounded-lg overflow-hidden group"
+          {/* 実績紹介のデスクトップビュー */}
+          <div className="hidden md:block">
+            <Swiper
+              modules={[Navigation, Pagination, A11y]}
+              spaceBetween={24}
+              slidesPerView={3}
+              loop={true}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
+              pagination={{
+                clickable: true,
+                el: '.works-pagination',
+              }}
+              className="works-swiper"
             >
-              <Image
-                src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&h=800&q=80"
-                alt="イベント実績"
-                fill
-                className="object-cover transition-transform group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
-                <h3 className="text-white text-xl font-bold">イベント実績</h3>
-                <p className="text-white text-sm px-6 text-center">
-                  大規模フェスから企業イベントまで<br />幅広い音響ニーズに対応
-                </p>
-                <Button asChild variant="outline" className="text-white border-white">
-                  <Link href="/works">
-                    詳しく見る
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-              viewport={{ once: true }}
-              className="relative h-64 rounded-lg overflow-hidden group"
-            >
-              <Image
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&h=800&q=80"
-                alt="施工実績"
-                fill
-                className="object-cover transition-transform group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
-                <h3 className="text-white text-xl font-bold">施工実績</h3>
-                <p className="text-white text-sm px-6 text-center">
-                  ライブハウスからホールまで<br />最適な音響空間を創造
-                </p>
-                <Button asChild variant="outline" className="text-white border-white">
-                  <Link href="/works">
-                    詳しく見る
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-              viewport={{ once: true }}
-              className="relative h-64 rounded-lg overflow-hidden group"
-            >
-              <Image
-                src="https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&h=800&q=80"
-                alt="導入事例"
-                fill
-                className="object-cover transition-transform group-hover:scale-110"
-              />
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
-                <h3 className="text-white text-xl font-bold">導入事例</h3>
-                <p className="text-white text-sm px-6 text-center">
-                  プロフェッショナルな<br />音響システムの導入実績
-                </p>
-                <Button asChild variant="outline" className="text-white border-white">
-                  <Link href="/works">
-                    詳しく見る
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </motion.div>
+              {[
+                {
+                  src: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "イベント実績",
+                  title: "イベント実績",
+                  description: "大規模フェスから企業イベントまで幅広い音響ニーズに対応"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "施工実績",
+                  title: "施工実績",
+                  description: "ライブハウスからホールまで最適な音響空間を創造"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "導入事例",
+                  title: "導入事例",
+                  description: "プロフェッショナルな音響システムの導入実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "コンサート実績",
+                  title: "コンサート実績",
+                  description: "国内外のアーティストコンサートでの音響サポート実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "劇場実績",
+                  title: "劇場実績",
+                  description: "全国の劇場・ホールでの音響システム導入実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec?auto=format&fit=crop&w=1200&h=800&q=80",
+                  alt: "スタジオ実績",
+                  title: "スタジオ実績",
+                  description: "プロフェッショナルスタジオの音響設計・施工実績"
+                }
+              ].map((work, index) => (
+                <SwiperSlide key={index}>
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="relative h-64 rounded-lg overflow-hidden group"
+                  >
+                    <Image
+                      src={work.src}
+                      alt={work.alt}
+                      fill
+                      className="object-cover transition-transform group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4">
+                      <h3 className="text-white text-xl font-bold">{work.title}</h3>
+                      <p className="text-white text-sm px-6 text-center">
+                        {work.description}
+                      </p>
+                      <Button asChild variant="outline" className="text-white border-white">
+                        <Link href="/works">
+                          詳しく見る
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </motion.div>
+                </SwiperSlide>
+              ))}
+              <div className="swiper-button-prev"></div>
+              <div className="swiper-button-next"></div>
+              <div className="works-pagination"></div>
+            </Swiper>
           </div>
-
           <div className="md:hidden">
             <Swiper
               modules={[Navigation, Pagination, A11y]}
               spaceBetween={16}
               slidesPerView={1}
               loop={true}
+              navigation={{
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+              }}
               pagination={{
                 clickable: true,
                 el: '.works-pagination',
@@ -790,6 +866,24 @@ export default function Home() {
                   alt: "導入事例",
                   title: "導入事例",
                   description: "プロフェッショナルな音響システムの導入実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a",
+                  alt: "コンサート実績",
+                  title: "コンサート実績",
+                  description: "国内外のアーティストコンサートでの音響サポート実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30",
+                  alt: "劇場実績",
+                  title: "劇場実績",
+                  description: "全国の劇場・ホールでの音響システム導入実績"
+                },
+                {
+                  src: "https://images.unsplash.com/photo-1429962714451-bb934ecdc4ec",
+                  alt: "スタジオ実績",
+                  title: "スタジオ実績",
+                  description: "プロフェッショナルスタジオの音響設計・施工実績"
                 }
               ].map((work, index) => (
                 <SwiperSlide key={index}>
@@ -815,7 +909,9 @@ export default function Home() {
                   </div>
                 </SwiperSlide>
               ))}
-              <div className="works-pagination mt-4"></div>
+              <div className="swiper-button-prev"></div>
+              <div className="swiper-button-next"></div>
+              <div className="works-pagination"></div>
             </Swiper>
           </div>
         </div>
@@ -974,7 +1070,6 @@ export default function Home() {
                       </Dialog>
                     </SwiperSlide>
                   ))}
-                {/* ナビゲーションボタンとページネーション要素を追加 */}
                 <div className="swiper-button-prev"></div>
                 <div className="swiper-button-next"></div>
                 <div className="swiper-pagination"></div>
@@ -999,17 +1094,8 @@ export default function Home() {
             <p className="text-lg text-muted-foreground mb-12">
               世界最高峰の音響機器メーカーと提携
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8">
-              {[
-                { name: "Martin Audio", image: "/makers/martin-audio.png", description: "Martin Audioは世界最高峰の音響機器メーカーです" },
-                { name: "d&b audiotechnik", image: "/makers/db.png", description: "d&b audiotechnikは専門的な音響ソリューションを提供" },
-                { name: "ROBE", image: "/makers/robe.png", description: "ROBEは世界最高峰の音響機器メーカーです" },
-                { name: "YAMAHA", image: "/makers/yamaha.png", description: "YAMAHAは音楽機器の専門メーカーです" },
-                { name: "DiGiCo", image: "/makers/digico.png", description: "DiGiCoは専門的な音響ソリューションを提供" },
-                { name: "Avolites", image: "/makers/avolites.png", description: "Avolitesは世界最高峰の音響ソリューションを提供" },
-                { name: "Martin", image: "/makers/martin.png", description: "Martinは世界最高峰の音響機器メーカーです" },
-                { name: "SHURE", image: "/makers/shure.png", description: "SHUREは専門的な音声機器を提供" }
-              ].map((maker, index) => (
+            <div className="hidden md:grid md:grid-cols-5 gap-8">
+              {makers.map((maker, index) => (
                 <HoverCard key={index}>
                   <HoverCardTrigger asChild>
                     <motion.div
@@ -1021,7 +1107,7 @@ export default function Home() {
                     >
                       <div className="relative w-full h-12">
                         <Image
-                          src={maker.image}
+                          src={`https://placehold.co/200x100/png?text=${maker.name}`}
                           alt={maker.name}
                           fill
                           className="object-contain filter grayscale hover:grayscale-0 transition-all"
@@ -1040,6 +1126,31 @@ export default function Home() {
                   </HoverCardContent>
                 </HoverCard>
               ))}
+            </div>
+            <div className="md:hidden">
+              <div className="grid grid-cols-2 gap-4">
+                {displayedMakers.map((maker, index) => (
+                  <motion.div
+                    key={maker.name}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="p-4 rounded-lg bg-card"
+                  >
+                    <div className="relative w-full h-12">
+                      <Image
+                        src={`https://placehold.co/200x100/png?text=${maker.name}`}
+                        alt={maker.name}
+                        fill
+                        className="object-contain"
+                        unoptimized
+                      />
+                    </div>
+                    <p className="mt-2 text-sm font-medium text-center">{maker.name}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </motion.div>
           
@@ -1119,7 +1230,7 @@ function EquipmentSkeleton() {
             <Skeleton className="h-6 w-32 mb-2" />
             <Skeleton className="h-10 w-24" />
           </div>
-    </div>
+        </div>
       ))}
     </>
   );

@@ -82,13 +82,20 @@
 }
 
 /* Swiper Customization */
-.equipment-swiper {
-  padding: 24px 0 48px !important;
+.equipment-swiper,
+.services-swiper,
+.works-swiper {
+  padding: 24px 40px 48px !important;
   position: relative;
 }
 
+/* 基本的な矢印のスタイル */
 .equipment-swiper .swiper-button-next,
-.equipment-swiper .swiper-button-prev {
+.equipment-swiper .swiper-button-prev,
+.services-swiper .swiper-button-next,
+.services-swiper .swiper-button-prev,
+.works-swiper .swiper-button-next,
+.works-swiper .swiper-button-prev {
   color: hsl(var(--primary));
   background: hsl(var(--background));
   width: 40px;
@@ -96,71 +103,152 @@
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
 }
 
+.equipment-swiper .swiper-button-next,
+.services-swiper .swiper-button-next,
+.works-swiper .swiper-button-next {
+  right: 0;
+}
+
+.equipment-swiper .swiper-button-prev,
+.services-swiper .swiper-button-prev,
+.works-swiper .swiper-button-prev {
+  left: 0;
+}
+
+/* ホバー時のスタイル */
 .equipment-swiper .swiper-button-next:hover,
-.equipment-swiper .swiper-button-prev:hover {
+.equipment-swiper .swiper-button-prev:hover,
+.services-swiper .swiper-button-next:hover,
+.services-swiper .swiper-button-prev:hover,
+.works-swiper .swiper-button-next:hover,
+.works-swiper .swiper-button-prev:hover {
   background: hsl(var(--primary));
   color: hsl(var(--background));
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .equipment-swiper .swiper-button-next:after,
-.equipment-swiper .swiper-button-prev:after {
+.equipment-swiper .swiper-button-prev:after,
+.services-swiper .swiper-button-next:after,
+.services-swiper .swiper-button-prev:after,
+.works-swiper .swiper-button-next:after,
+.works-swiper .swiper-button-prev:after {
   font-size: 20px;
   font-weight: bold;
 }
 
-.equipment-swiper .swiper-button-next {
-  right: 10px;
-}
-
-.equipment-swiper .swiper-button-prev {
-  left: 10px;
-}
-
-.equipment-swiper .swiper-pagination {
+.equipment-swiper .swiper-pagination,
+.services-swiper .swiper-pagination,
+.works-swiper .swiper-pagination,
+.services-pagination,
+.works-pagination {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
+  text-align: center;
 }
 
-.equipment-swiper .swiper-pagination-bullet {
+.equipment-swiper .swiper-pagination-bullet,
+.services-swiper .swiper-pagination-bullet,
+.works-swiper .swiper-pagination-bullet,
+.services-pagination .swiper-pagination-bullet,
+.works-pagination .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
   background: hsl(var(--primary));
-  opacity: 0.5;
+  opacity: 0.3;
+  margin: 0 5px;
+  border-radius: 50%;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.equipment-swiper .swiper-pagination-bullet:hover {
-  opacity: 0.8;
+.equipment-swiper .swiper-pagination-bullet:hover,
+.services-swiper .swiper-pagination-bullet:hover,
+.works-swiper .swiper-pagination-bullet:hover,
+.services-pagination .swiper-pagination-bullet:hover,
+.works-pagination .swiper-pagination-bullet:hover {
+  opacity: 0.5;
 }
 
-.equipment-swiper .swiper-pagination-bullet-active {
+.equipment-swiper .swiper-pagination-bullet-active,
+.services-swiper .swiper-pagination-bullet-active,
+.works-swiper .swiper-pagination-bullet-active,
+.services-pagination .swiper-pagination-bullet-active,
+.works-pagination .swiper-pagination-bullet-active {
   opacity: 1;
+  background: hsl(var(--primary));
   transform: scale(1.2);
 }
 
+/* カードの高さを個別に設定 */
 .equipment-swiper .swiper-slide {
-  height: auto;
-  transition: transform 0.3s ease;
+  height: 300px !important;
 }
 
-.equipment-swiper .swiper-slide:hover {
-  transform: translateY(-5px);
+.services-swiper .swiper-slide {
+  height: 400px !important;
+}
+
+.works-swiper .swiper-slide {
+  height: 300px !important;
 }
 
 @media (max-width: 640px) {
   .equipment-swiper .swiper-button-next,
-  .equipment-swiper .swiper-button-prev {
+  .equipment-swiper .swiper-button-prev,
+  .services-swiper .swiper-button-next,
+  .services-swiper .swiper-button-prev,
+  .works-swiper .swiper-button-next,
+  .works-swiper .swiper-button-prev {
     display: none;
+  }
+  .equipment-swiper .swiper-slide,
+  .services-swiper .swiper-slide,
+  .works-swiper .swiper-slide {
+    height: 350px !important;
   }
 }
 
-/* Services Swiper */
+/* Swiper Customization */
 .services-swiper {
-  padding: 24px 0 48px !important;
   position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 24px 0 48px !important;
+}
+
+.services-swiper .swiper-slide {
+  height: auto !important;
+  display: flex;
+}
+
+.services-swiper .swiper-slide > * {
+  width: 100%;
+}
+
+.services-swiper .swiper-button-next,
+.services-swiper .swiper-button-prev {
+  color: hsl(var(--primary));
+  background: hsl(var(--background));
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  top: calc(50% - 40px);
+}
+
+.services-swiper .swiper-button-next:after,
+.services-swiper .swiper-button-prev:after {
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .services-swiper .swiper-pagination {
@@ -171,13 +259,18 @@
 }
 
 .services-swiper .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
   background: hsl(var(--primary));
-  opacity: 0.5;
+  opacity: 0.3;
+  margin: 0 5px;
+  border-radius: 50%;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 .services-swiper .swiper-pagination-bullet:hover {
-  opacity: 0.8;
+  opacity: 0.5;
 }
 
 .services-swiper .swiper-pagination-bullet-active {
@@ -185,38 +278,47 @@
   transform: scale(1.2);
 }
 
-.services-swiper .swiper-slide {
-  height: auto;
-}
-
-/* Works Swiper */
-.works-swiper {
-  padding: 24px 0 48px !important;
-  position: relative;
-}
-
-.works-swiper .swiper-pagination {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.works-swiper .swiper-pagination-bullet {
-  background: hsl(var(--primary));
-  opacity: 0.5;
+/* Card Styles */
+.services-swiper .card {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  background: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   transition: all 0.3s ease;
 }
 
-.works-swiper .swiper-pagination-bullet:hover {
-  opacity: 0.8;
+.services-swiper .card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.works-swiper .swiper-pagination-bullet-active {
-  opacity: 1;
-  transform: scale(1.2);
+.services-swiper .card-header {
+  padding: 1.5rem;
+  text-align: center;
 }
 
-.works-swiper .swiper-slide {
-  height: auto;
+.services-swiper .card-content {
+  flex: 1;
+  padding: 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.services-swiper .card-footer {
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .services-swiper .card {
+    min-height: 350px;
+  }
+  .services-swiper .swiper-button-next,
+  .services-swiper .swiper-button-prev {
+    display: none;
+  }
 }
