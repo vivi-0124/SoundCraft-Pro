@@ -52,6 +52,11 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation, Pagination, A11y } from 'swiper/modules';
 
 interface Equipment {
   src: string;
@@ -771,75 +776,104 @@ export default function Home() {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="relative">
             <Suspense fallback={<EquipmentSkeleton />}>
-              {equipments
-                .filter(item => 
-                  filter === "" || 
-                  item.label.toLowerCase().includes(filter.toLowerCase()) ||
-                  item.description.toLowerCase().includes(filter.toLowerCase())
-                )
-                .map((item, index) => (
-                  <Dialog key={index}>
-                    <DialogTrigger asChild>
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: index * 0.1 }}
-                        viewport={{ once: true }}
-                        className="relative h-[300px] rounded-lg overflow-hidden group cursor-pointer"
-                        onClick={() => setSelectedItem(item)}
-                      >
-                        {isLoading ? (
-                          <Skeleton className="h-full w-full" />
-                        ) : (
-                          <>
-                            <Image
-                              src={item.src}
-                              alt={item.alt}
-                              fill
-                              className="object-cover transition-transform group-hover:scale-110"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
-                              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                                <p className="text-lg font-semibold mb-2">{item.label}</p>
-                                <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20">
-                                  詳しく見る
-                                  <ExternalLink className="ml-2 h-4 w-4" />
-                                </Button>
-                              </div>
+              <Swiper
+                modules={[Navigation, Pagination, A11y]}
+                spaceBetween={24}
+                slidesPerView={1}
+                navigation={{
+                  nextEl: '.swiper-button-next',
+                  prevEl: '.swiper-button-prev',
+                }}
+                pagination={{
+                  clickable: true,
+                  el: '.swiper-pagination',
+                }}
+                breakpoints={{
+                  640: {
+                    slidesPerView: 2,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                  },
+                }}
+                className="equipment-swiper"
+              >
+                {equipments
+                  .filter(item => 
+                    filter === "" || 
+                    item.label.toLowerCase().includes(filter.toLowerCase()) ||
+                    item.description.toLowerCase().includes(filter.toLowerCase())
+                  )
+                  .map((item, index) => (
+                    <SwiperSlide key={index}>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: index * 0.1 }}
+                            viewport={{ once: true }}
+                            className="relative h-[300px] rounded-lg overflow-hidden group cursor-pointer"
+                            onClick={() => setSelectedItem(item)}
+                          >
+                            {isLoading ? (
+                              <Skeleton className="h-full w-full" />
+                            ) : (
+                              <>
+                                <Image
+                                  src={item.src}
+                                  alt={item.alt}
+                                  fill
+                                  className="object-cover transition-transform group-hover:scale-110"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                                    <p className="text-lg font-semibold mb-2">{item.label}</p>
+                                    <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20">
+                                      詳しく見る
+                                      <ExternalLink className="ml-2 h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                          </motion.div>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[625px]">
+                          <DialogHeader>
+                            <DialogTitle>{item.label}</DialogTitle>
+                            <DialogDescription>{item.description}</DialogDescription>
+                          </DialogHeader>
+                          <div className="mt-4">
+                            <div className="relative h-[300px] rounded-lg overflow-hidden">
+                              <Image
+                                src={item.src}
+                                alt={item.alt}
+                                fill
+                                className="object-cover"
+                              />
                             </div>
-                          </>
-                        )}
-                      </motion.div>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[625px]">
-                      <DialogHeader>
-                        <DialogTitle>{item.label}</DialogTitle>
-                        <DialogDescription>{item.description}</DialogDescription>
-                      </DialogHeader>
-                      <div className="mt-4">
-                        <div className="relative h-[300px] rounded-lg overflow-hidden">
-                          <Image
-                            src={item.src}
-                            alt={item.alt}
-                            fill
-                            className="object-cover"
-                          />
-                        </div>
-                        <div className="mt-4">
-                          <h4 className="font-semibold mb-2">主な特徴</h4>
-                          <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                            <li>高品質な音響性能</li>
-                            <li>プロフェッショナル仕様</li>
-                            <li>信頼性の高い動作</li>
-                            <li>豊富な機能</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
-                ))}
+                            <div className="mt-4">
+                              <h4 className="font-semibold mb-2">主な特徴</h4>
+                              <ul className="list-disc list-inside space-y-2 text-muted-foreground">
+                                <li>高品質な音響性能</li>
+                                <li>プロフェッショナル仕様</li>
+                                <li>信頼性の高い動作</li>
+                                <li>豊富な機能</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
+                    </SwiperSlide>
+                  ))}
+                {/* ナビゲーションボタンとページネーション要素を追加 */}
+                <div className="swiper-button-prev"></div>
+                <div className="swiper-button-next"></div>
+                <div className="swiper-pagination"></div>
+              </Swiper>
             </Suspense>
           </div>
         </div>
