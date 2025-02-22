@@ -829,7 +829,7 @@ export default function Home() {
                                   fill
                                   className="object-cover transition-transform group-hover:scale-110"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
                                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                                     <p className="text-lg font-semibold mb-2">{item.label}</p>
                                     <Button variant="outline" className="bg-white/10 backdrop-blur-sm border-white/20 hover:bg-white/20">
