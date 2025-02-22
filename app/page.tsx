@@ -63,6 +63,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SiteSearch } from "@/components/site-search";
+import { EquipmentSearch } from "@/components/equipment-search";
 
 interface Equipment {
   src: string;
@@ -933,37 +935,52 @@ export default function Home() {
             </p>
             
             {/* Filter Input with Suggestions */}
-            <div className="search-container">
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <div className="search-input-wrapper">
-                    <Search className="search-icon" />
-                    <Input
-                      type="text"
-                      placeholder="機材やメーカーを検索..."
-                      className="search-input"
-                      value={filter}
-                      onChange={(e) => setFilter(e.target.value)}
-                      onClick={() => setOpen(true)}
-                    />
-                  </div>
-                </PopoverTrigger>
-                <PopoverContent className="search-command p-0" align="start">
-                  <Command className="search-command">
-                    <CommandInput 
-                      placeholder="キーワードを入力..." 
-                      className="search-input"
-                    />
+            <div className="search-container max-w-[600px] mx-auto">
+              <div className="relative flex items-center">
+                <div className="relative w-full">
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    onClick={() => setOpen(true)}
+                    className="w-full justify-between h-12 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Search className="h-5 w-5 flex-shrink-0 text-muted-foreground" />
+                      <span className="text-muted-foreground">機材やメーカーを検索...</span>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="sm:max-w-[600px] p-0 [&>button]:hidden top-0 translate-y-0">
+                  <Command className="rounded-lg border shadow-md">
+                    <div className="flex items-center border-b px-3" cmdk-input-wrapper="">
+                      <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
+                      <CommandInput
+                        placeholder="機材やメーカーを検索..."
+                        value={filter}
+                        onValueChange={setFilter}
+                        className="flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                      />
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 flex-shrink-0 rounded-full"
+                        onClick={() => setOpen(false)}
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">閉じる</span>
+                      </Button>
+                    </div>
                     <CommandList>
-                      <CommandEmpty className="search-command-empty">
-                        検索結果が見つかりませんでした
+                      <CommandEmpty>
+                        <div className="flex flex-col items-center justify-center py-6 text-sm text-muted-foreground">
+                          <Search className="h-8 w-8 mb-2 opacity-50" />
+                          <p>検索結果が見つかりませんでした。</p>
+                        </div>
                       </CommandEmpty>
                       {Object.entries(suggestions).map(([category, items]) => (
-                        <CommandGroup 
-                          key={category} 
-                          heading={category}
-                          className="search-command-group"
-                        >
+                        <CommandGroup key={category} heading={category} className="px-2">
                           {items.map((item) => (
                             <CommandItem
                               key={item}
@@ -971,15 +988,15 @@ export default function Home() {
                                 setFilter(value);
                                 setOpen(false);
                               }}
-                              className="search-command-item"
+                              className="flex items-center px-2 py-2 rounded-md cursor-pointer"
                             >
                               {category === "機材カテゴリー" ? (
-                                <Headphones className="search-command-item-icon" />
+                                <Headphones className="mr-2 h-4 w-4 text-primary" />
                               ) : (
-                                <Building2 className="search-command-item-icon" />
+                                <Building2 className="mr-2 h-4 w-4 text-primary" />
                               )}
-                              <div className="search-command-item-content">
-                                <div className="search-command-item-title">{item}</div>
+                              <div className="flex flex-col">
+                                <span className="font-medium">{item}</span>
                               </div>
                             </CommandItem>
                           ))}
@@ -987,19 +1004,8 @@ export default function Home() {
                       ))}
                     </CommandList>
                   </Command>
-                </PopoverContent>
-              </Popover>
-              {filter && (
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  onClick={() => setFilter("")}
-                >
-                  <X className="h-4 w-4" />
-                </motion.button>
-              )}
+                </DialogContent>
+              </Dialog>
             </div>
           </motion.div>
 
