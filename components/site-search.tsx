@@ -102,13 +102,15 @@ export function SiteSearch() {
       <DialogContent className="sm:max-w-[600px] p-0 [&>button]:hidden top-0 translate-y-0 rounded-t-none border-t-0">
         <Command>
           <div className="flex items-center border-b p-4">
-            <CommandInput
-              ref={inputRef}
-              placeholder="検索キーワードを入力..."
-              value={value}
-              onValueChange={setValue}
-              className="flex h-9 w-full rounded-md bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-            />
+            <div className="flex-1 flex items-center">
+              <CommandInput
+                ref={inputRef}
+                placeholder="検索キーワードを入力..."
+                value={value}
+                onValueChange={setValue}
+                className="flex h-9 w-full rounded-md bg-transparent py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
             <Button
               variant="ghost"
               size="icon"
